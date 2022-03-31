@@ -1,0 +1,31 @@
+Command:
+  Reload:
+    Message: '&bShow &8: &eConfig reloaded.'
+  Help:
+    EndOfHelp:
+      Message: '&bShow &8: &eThis is the end of the help list.'
+  Error:
+    ByConsole:
+      Message: '&bShow &8: &eThat command has to be executed by a player.'
+    NotExist:
+      Message: '&bShow &8: &eThat command doesn''t exist.'
+    BadSyntax:
+      Message: '&bShow &8: &ePlease do %Syntax% instead.'
+    NoPermission:
+      Message: '&bShow &8: &eYou don''t have permission to execute this command.'
+    SpecialCharacters:
+      Message: '&bShow &8: &ePlease don''t use any special characters.'
+  Show:
+    NotExist:
+      Message: '&bShow &8: &eYou''re not currently the host of a game.'
+    User:
+      Added:
+        Message: '&bShow &8: &e%Player% has been added to the game.'
+      Removed:
+        Message: '&bShow &8: &e%Player% has been removed from the show.'
+      Error:
+        NotExist:
+          Message: '&bShow &8: &e%Player% doesn''t exist.'
+        AlreadyInShow:
+          Message: '&bShow &8: &e%Player% is already in a game.'
+      

@@ -1,0 +1,12 @@
+main: Main.Main
+name: GameShow
+version: 1.0.0
+author: ResurrectAjax
+description: GameShow plugin
+api-version: 1.18
+
+commands:
+  Show:
+    description: run a PluginTemplate command
+    usage: /<command>
+    aliases: gameshow, gamesh, sh, gs, gsh
