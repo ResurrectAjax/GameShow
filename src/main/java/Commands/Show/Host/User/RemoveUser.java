@@ -92,7 +92,7 @@ public class RemoveUser extends ChildCommand{
 	@Override
 	public String getDescription() {
 		// TODO Auto-generated method stub
-		return "Remove a user from the show";
+		return "Remove a user from the game";
 	}
 
 	@Override

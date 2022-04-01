@@ -103,7 +103,7 @@ public class AddUser extends ChildCommand{
 	@Override
 	public String getDescription() {
 		// TODO Auto-generated method stub
-		return "Add a user to the show";
+		return "Add a user to the game";
 	}
 
 	@Override
