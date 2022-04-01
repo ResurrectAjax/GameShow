@@ -28,7 +28,10 @@ public class CloseGui extends ChildCommand{
 		ShowRepository showRepo = Main.getInstance().getShowRepository();
 		Show show = showRepo.getShowByUser(player.getUniqueId());
 		
-		if(show == null) return;
+		if(show == null) {
+			player.sendMessage(GeneralMethods.getBadSyntaxMessage("/show <subcommand>"));
+			return;
+		}
 		Player host = Bukkit.getPlayer(show.getHost());
 		
 		String message = GeneralMethods.format(lang.getString("Command.Show.Guess.Host.Skip.Message"), "%Player%", player.getName());

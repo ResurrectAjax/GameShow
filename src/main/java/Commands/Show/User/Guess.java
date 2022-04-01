@@ -26,7 +26,10 @@ public class Guess extends ChildCommand{
 		ShowRepository showRepo = main.getShowRepository();
 		Show show = showRepo.getShowByUser(player.getUniqueId());
 		
-		if(show == null) return;
+		if(show == null) {
+			player.sendMessage(GeneralMethods.getBadSyntaxMessage("/show <subcommand>"));
+			return;
+		}
 		show.addGuessingUser(player.getUniqueId());
 		
 		player.closeInventory();
