@@ -1,11 +1,11 @@
-package Commands.Show;
+package Commands.Show.Host;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import Commands.Show.User.AddUser;
-import Commands.Show.User.RemoveUser;
+import Commands.Show.Host.User.AddUser;
+import Commands.Show.Host.User.RemoveUser;
 import Interfaces.ParentCommand;
 import Main.Main;
 
@@ -16,7 +16,7 @@ public class UserCommand extends ParentCommand{
 	public UserCommand(Main main) {
 		subcommands = new ArrayList<ParentCommand>(Arrays.asList(
 				new AddUser(main),
-				new RemoveUser(main),
+				new RemoveUser(),
 				new Help.HelpCommand(main)
 				));
 	}
@@ -24,7 +24,7 @@ public class UserCommand extends ParentCommand{
 	@Override
 	public String getPermissionNode() {
 		// TODO Auto-generated method stub
-		return null;
+		return "show.host";
 	}
 
 	@Override

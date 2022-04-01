@@ -1,13 +1,15 @@
 package GUI;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
+
+import javax.annotation.Nullable;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -26,6 +28,8 @@ public class Gui {
 	private Player player;
 	private Main main;
 	
+	private InventoryType type;
+	
 	private int page, totalPages;
 	
 	/**
@@ -34,23 +38,28 @@ public class Gui {
 	 * @param player player who opens GUI
 	 * @param size row size of GUI
 	 * @param name name of the GUI
-	 * @param replaceStr String to replace something with... <i>Nullable</i>
+	 * @param replaceStr String to replace something with
 	 * */
-	public Gui(Main main, Player player, int size, String name, String replaceStr) {
+	public Gui(Main main, Player player, int size, String name, @Nullable String replaceStr) {
 		this.main = main;
 		this.player = player;
-		guiConfig = main.getGuiConfig();
-		inventory = Bukkit.createInventory(new CustomInventoryHolder(), size*9, GeneralMethods.format(name, replaceStr));
+		this.guiConfig = main.getGuiConfig();
+		this.type = InventoryType.CHEST;
+		this.inventory = Bukkit.createInventory(new CustomInventoryHolder(), size*9, GeneralMethods.format(name, replaceStr));
 		
 		createTemplate(name, replaceStr);
 		
+	}
+	
+	public InventoryType getType() {
+		return type;
 	}
 	
 	/**
 	 * Set a slot 
 	 * */
 	public void setSlot(ItemStack item, int slot) {
-		inventory.setItem(slot, item);
+		this.inventory.setItem(slot, item);
 	}
 	
 	/**
@@ -79,34 +88,34 @@ public class Gui {
 	/**
 	 * Create the template with replace string
 	 * @param guiName name of the gui
-	 * @param replaceStr String to replace something with... <i>Nullable</i>
+	 * @param replaceStr String to replace something with
 	 * */
-	public void createTemplate(String guiName, String replaceStr) {
+	public void createTemplate(String guiName, @Nullable String replaceStr) {
 		templateLayout(Gui.getGuiSection(guiName)[0] + "." + Gui.getGuiSection(guiName)[1], replaceStr);
 	}
 	
 	/**
 	 * Create the gui and bind it to player
 	 * @param guiName name of the gui
-	 * @param replaceStr string to replace something with... <i>Nullable</i>
+	 * @param replaceStr string to replace something with
 	 * */
-	private void templateLayout(String guiName, String replaceStr) {
+	private void templateLayout(String guiName, @Nullable String replaceStr) {
 		
 		Inventory inventory = getInventory();
-		ItemStack backgroundItem = new ItemStack(Material.valueOf(guiConfig.getString("Raid." + guiName + ".BackgroundItem")));
+		ItemStack backgroundItem = new ItemStack(Material.valueOf(guiConfig.getString(main.getName() + "." + guiName + ".BackgroundItem")));
 		
 		for(int i = 0; i < inventory.getSize(); i++) {
 			setSlot(backgroundItem, i);
 		}
 		
-		for(String key : guiConfig.getConfigurationSection("Raid." + guiName + ".Items").getKeys(false)) {
-			ItemStack item = new ItemStack(Material.valueOf(guiConfig.getString("Raid." + guiName + ".Items." + key + ".Material")));
+		for(String key : guiConfig.getConfigurationSection(main.getName() + "." + guiName + ".Items").getKeys(false)) {
+			ItemStack item = new ItemStack(Material.valueOf(guiConfig.getString(main.getName() + "." + guiName + ".Items." + key + ".Material")));
 			List<String> lore = new ArrayList<String>();
-			String name = GeneralMethods.format(guiConfig.getString("Raid." + guiName + ".Items." + key + ".Name"));
+			String name = GeneralMethods.format(guiConfig.getString(main.getName() + "." + guiName + ".Items." + key + ".Name"));
 			ItemMeta meta = item.getItemMeta();
-			int slot = guiConfig.getInt("Raid." + guiName + ".Items." + key + ".ItemSlot");
+			int slot = guiConfig.getInt(main.getName() + "." + guiName + ".Items." + key + ".ItemSlot");
 			
-			for(String lores : guiConfig.getStringList("Raid." + guiName + ".Items." + key + ".Lore")) {
+			for(String lores : guiConfig.getStringList(main.getName() + "." + guiName + ".Items." + key + ".Lore")) {
 				lore.add(GeneralMethods.format(lores, replaceStr));
 			}
 			
@@ -130,53 +139,13 @@ public class Gui {
 	 * @param items list of items to put in gui
 	 * @param page index of the current page
 	 * */
-	public void createItemList(int startIndex, int width, int height, Inventory inventory, List<ItemStack> items, int page) {
-		ItemStack air = new ItemStack(Material.AIR);
-
-		HashMap<int[], ItemStack> headSlots = new HashMap<int[], ItemStack>();
-		int totalPages = (items.size() / (width*(height-1))+1);
+	public void createItemList(int startIndex, int width, int height, List<ItemStack> items, int page) {
+		int totalPages = 1;
 		
-		int number = 0;
-		for(int i = 0; i < totalPages; i++) {
-			for(int j = 0; j < height; j++) {
-				for(int k = 0; k < width; k++) {
-					inventory.setItem(k + startIndex + (9*j), air);
-					if(j == (height-1)) {
-						if(k == 0) {
-							inventory.setItem(k + startIndex + (9*j), GeneralMethods.getPlayerHead("MHF_ArrowLeft"));	
-						}
-						if(k == width-1) {
-							inventory.setItem(k + startIndex + (9*j), GeneralMethods.getPlayerHead("MHF_ArrowRight"));	
-						}
-						if(k == width/2) {
-							ItemStack item = new ItemStack(Material.LECTERN);
-							ItemMeta meta = item.getItemMeta();
-							
-							meta.setDisplayName(GeneralMethods.format("&6&lPage: &7" + (page+1)));
-							item.setItemMeta(meta);
-							
-							inventory.setItem(k + startIndex + (9*j), item);
-						}
-					}
-					else if(j < height){
-						if(!headSlots.containsKey(new int[] {i, j, k})) {
-							if(items.size() > number) {
-								headSlots.put(new int[] {i, j, k}, items.get(number));
-								
-							}
-							else {
-								inventory.setItem(startIndex + k + (9*j), air);
-							}
-						}
-						number++;
-					}
-				}
-			}
-		}
-		for(int[] slot : headSlots.keySet()) {
-			if(slot[0] == page) {
-				inventory.setItem(startIndex + slot[2] + (9*slot[1]), headSlots.get(slot));
-			}
+		int listIndex = 0;
+		for(int i = startIndex; i < (startIndex+width); i++) {
+			this.inventory.setItem(i, items.get(listIndex));
+			listIndex++;
 		}
 		
 		this.page = page;
@@ -249,7 +218,7 @@ public class Gui {
 		for(String section : guiConf.getConfigurationSection(pluginName).getKeys(false)) {
 			for(String gui : guiConf.getConfigurationSection(pluginName + "." + section).getKeys(false)) {
 				String display = guiConf.getString(pluginName + "." + section + "." + gui + ".GUIName");
-				if(GeneralMethods.format(display).equals(displayName)) {
+				if(GeneralMethods.format(display).equals(GeneralMethods.format(displayName))) {
 					sectionGui[0] = section;
 					sectionGui[1] = gui;
 				}	

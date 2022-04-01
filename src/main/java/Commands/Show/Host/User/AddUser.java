@@ -1,4 +1,4 @@
-package Commands.Show.User;
+package Commands.Show.Host.User;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,8 +8,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
-import Commands.Show.Show;
-import Commands.Show.ShowRepository;
+import Commands.Show.Host.Show;
+import Commands.Show.Host.ShowRepository;
 import General.GeneralMethods;
 import Interfaces.ChildCommand;
 import Interfaces.ParentCommand;
@@ -30,14 +30,38 @@ public class AddUser extends ChildCommand{
 		if(args.length < 3) player.sendMessage(GeneralMethods.getBadSyntaxMessage(getSyntax()));
 		else if(Bukkit.getPlayer(args[2]) == null) player.sendMessage(GeneralMethods.format(lang.getString("Command.Show.User.Error.NotExist.Message"), "%Player%", args[2]));
 		else {
-			UUID user = Bukkit.getPlayer(args[2]).getUniqueId();
+			Player user = Bukkit.getPlayer(args[2]);
 			
 			Show show = showRepo.getShowByHost(player.getUniqueId());
-			if(show != null) show.addUser(user);
-			else showRepo.createShow(player.getUniqueId(), user);
+			if(show != null) {
+				if(showRepo.isInShow(user.getUniqueId())) {
+					player.sendMessage(GeneralMethods.format(lang.getString("Command.Show.User.Error.AlreadyInShow.Message"), "%Player%", user.getName()));
+					return;
+				}
+				else if(showRepo.getShowByUser(player.getUniqueId()) != null) {
+					player.sendMessage(GeneralMethods.format(lang.getString("Command.Show.AlreadyInShow.Message")));
+					return;
+				}
+				else show.addUser(user.getUniqueId());
+			}
+			else if(player.getUniqueId().equals(Bukkit.getPlayer(args[2]).getUniqueId())) {
+				player.sendMessage(GeneralMethods.format(lang.getString("Command.Show.User.Error.SelfInvite.Message"), "%Player%", user.getName()));
+				return;
+			}
+			else showRepo.createShow(player.getUniqueId(), user.getUniqueId());
 			
-			String message = GeneralMethods.format(lang.getString("Command.Show.User.Added.Message"));
+			show = showRepo.getShowByHost(player.getUniqueId());
+			String message = GeneralMethods.format(lang.getString("Command.Show.User.Added.Host.Message"), "%Player%", user.getName());
 			player.sendMessage(message);
+			
+			for(UUID use : show.getUsers()) {
+				if(use.equals(user.getUniqueId())) continue;
+				if(Bukkit.getPlayer(use) == null) continue;
+				Bukkit.getPlayer(use).sendMessage(message);
+			}
+			
+			message = GeneralMethods.format(lang.getString("Command.Show.User.Added.User.Message"), "%Player%", player.getName());
+			user.sendMessage(message);
 		}
 		
 	}

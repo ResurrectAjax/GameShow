@@ -1,25 +1,26 @@
-package Commands.Show;
+package Commands.Show.Admin;
 
 import java.util.List;
 import java.util.UUID;
 
 import org.bukkit.entity.Player;
 
+import General.GeneralMethods;
 import Interfaces.ChildCommand;
 import Interfaces.ParentCommand;
 import Main.Main;
 
-public class Start extends ChildCommand{
+public class Reload extends ChildCommand{
 
 	private Main main;
-	public Start(Main main) {
+	public Reload(Main main) {
 		this.main = main;
 	}
 	
 	@Override
 	public void perform(Player player, String[] args) {
-		
-		
+		main.reload();
+		player.sendMessage(GeneralMethods.getReloadMessage());
 		
 	}
 
@@ -32,7 +33,7 @@ public class Start extends ChildCommand{
 	@Override
 	public String getPermissionNode() {
 		// TODO Auto-generated method stub
-		return null;
+		return "show.admin";
 	}
 
 	@Override
@@ -44,19 +45,19 @@ public class Start extends ChildCommand{
 	@Override
 	public String getName() {
 		// TODO Auto-generated method stub
-		return "start";
+		return "reload";
 	}
 
 	@Override
 	public String getSyntax() {
 		// TODO Auto-generated method stub
-		return "/show start <word>";
+		return "/show reload";
 	}
 
 	@Override
 	public String getDescription() {
 		// TODO Auto-generated method stub
-		return "Start a game with a given word";
+		return "Reloads the configuration files";
 	}
 
 	@Override

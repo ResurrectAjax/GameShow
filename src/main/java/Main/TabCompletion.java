@@ -42,7 +42,8 @@ public class TabCompletion implements TabCompleter{
 		
 		List<String> tabCommands = new ArrayList<String>();
 		if(sender instanceof Player) {
-			UUID uuid = ((Player) sender).getUniqueId();
+			Player player = ((Player) sender);
+			UUID uuid = player.getUniqueId();
 
 			if(commandManager.getStringList().contains(command.getName().toLowerCase())) {
 				ParentCommand commands = commandManager.getCommandByName(command.getName());
@@ -51,6 +52,10 @@ public class TabCompletion implements TabCompleter{
 				}
 				else {
 					tabCommands.addAll(Arrays.asList(commands.getArguments(uuid)));
+					for(ParentCommand comman : commands.getSubCommands()) {
+						if(comman.getPermissionNode() != null && !player.hasPermission(comman.getPermissionNode())) tabCommands.remove(comman.getName());
+						if(comman.hasGUI()) tabCommands.remove(comman.getName());
+					}
 				}
 			}
 			
@@ -70,8 +75,9 @@ public class TabCompletion implements TabCompleter{
 		for(ParentCommand subcommand : command.getSubCommands()) {
 			if(subcommand.getArguments(uuid) == null) continue;
 			if(subcommand.getName().equalsIgnoreCase(arg)) {
-				String permission = subcommand.getPermissionNode();
-				if(permission != null && !Bukkit.getPlayer(uuid).hasPermission(permission)) continue;
+				String subpermission = subcommand.getPermissionNode();
+				if(subpermission != null && !Bukkit.getPlayer(uuid).hasPermission(subpermission)) continue;
+				if(subcommand.hasGUI()) continue;
 				tabCommands.addAll(Arrays.asList(subcommand.getArguments(uuid)));
 				return;
 			}

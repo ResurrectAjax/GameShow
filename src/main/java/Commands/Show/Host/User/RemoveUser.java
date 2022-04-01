@@ -1,4 +1,4 @@
-package Commands.Show.User;
+package Commands.Show.Host.User;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,39 +8,51 @@ import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
-import Commands.Show.Show;
-import Commands.Show.ShowRepository;
+import Commands.Show.Host.Show;
+import Commands.Show.Host.ShowRepository;
 import General.GeneralMethods;
 import Interfaces.ChildCommand;
 import Interfaces.ParentCommand;
 import Main.Main;
 
 public class RemoveUser extends ChildCommand{
-
-	private Main main;
-	public RemoveUser(Main main) {
-		this.main = main;
-	}
 	
 	@Override
 	public void perform(Player player, String[] args) {
-		ShowRepository showRepo = main.getShowRepository();
-		FileConfiguration lang = main.getLanguage();
-		
 		if(args.length < 3) player.sendMessage(GeneralMethods.getBadSyntaxMessage(getSyntax()));
-		else if(Bukkit.getPlayer(args[2]) == null) player.sendMessage(GeneralMethods.format(lang.getString("Command.Show.User.Error.NotExist.Message"), "%Player%", args[2]));
 		else {
-			UUID user = Bukkit.getPlayer(args[2]).getUniqueId();
+			removePlayer(player, args[2]);
+		}
+	}
+	
+	public static void removePlayer(Player player, String name) {
+		ShowRepository showRepo = Main.getInstance().getShowRepository();
+		FileConfiguration lang = Main.getInstance().getLanguage();
+		
+		if(Bukkit.getPlayer(name) == null) player.sendMessage(GeneralMethods.format(lang.getString("Command.Show.User.Error.NotExist.Message"), "%Player%", name));
+		else {
+			Player user = Bukkit.getPlayer(name);
 			
 			Show show = showRepo.getShowByHost(player.getUniqueId());
 			if(show == null) player.sendMessage(GeneralMethods.format(lang.getString("Command.Show.NotExist.Message")));
+			else if(!show.getUsers().contains(user.getUniqueId())) player.sendMessage(GeneralMethods.format(lang.getString("Command.Show.User.Error.NotInShow.Message"), "%Player%", name));
 			else {
-				show.removeUser(user);
-				String message = GeneralMethods.format(lang.getString("Command.Show.User.Removed.Message"), "%Player%", args[2]);
+				show.removeUser(user.getUniqueId());
+				String message = GeneralMethods.format(lang.getString("Command.Show.User.Removed.Host.Message"), "%Player%", name);
 				player.sendMessage(message);
+				
+				for(UUID use : show.getUsers()) {
+					if(use.equals(user.getUniqueId())) continue;
+					if(Bukkit.getPlayer(use) == null) continue;
+					Bukkit.getPlayer(use).sendMessage(message);
+				}
+				
+				message = GeneralMethods.format(lang.getString("Command.Show.User.Removed.User.Message"), "%Player%", player.getName());
+				user.sendMessage(message);
+				
+				if(show.getUsers().size() < 2) showRepo.endShow(show);
 			}
 		}
-		
 	}
 
 	@Override

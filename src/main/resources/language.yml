@@ -18,14 +18,65 @@ Command:
   Show:
     NotExist:
       Message: '&bShow &8: &eYou''re not currently the host of a game.'
+    Reset:
+      Message: '&bShow &8: &eThe game has been reset.'
+    AlreadyInShow:
+      Message: '&bShow &8: &eYou''re already part of a show.'
+    Start:
+      NotEnoughUsers:
+        Message: '&bShow &8: &eThe game needs to have at least 2 players.'
+      Started:
+        Message: '&bShow &8: &eThe game has started with %Word% as the word.'
+      NotStartedYet:
+        Message: '&bShow &8: &eThe game hasn''t started yet.'
+      WordTooLong:
+        Message: '&bShow &8: &eThe word you''ve chosen is too long.'
+    WonGame:
+      Host:
+        Message: '&bShow &8: &e%Player% has won the game.'
+      User:
+        Message: '&bShow &8: &eYou''ve won the game.'
+      Word:
+        Message: '&bShow &8: &eThe word was %Word%.'
+    Guess:
+      Host:
+        Guessing:
+          Message: '&bShow &8: &e%Player% is guessing the word.'
+        Skip:
+          Message: '&bShow &8: &e%Player% has chosen to skip the guess.'
+        Wrong: 
+          Message: '&bShow &8: &e%Player% has guessed wrong and has been eliminated.'
+      User:
+        Guessing:
+          Message: '&bShow &8: &cThe next word you type will count as your guess.'
+        Skip:
+          Message: '&bShow &8: &eYou''ve skipped a guess.'
+        Wrong:
+          Message: '&bShow &8: &eYou''ve guessed wrong and have been eliminated.'
+    Win:
+      ChallengeWon:
+        Host:
+          Message: '&bShow &8: &e%Player% has won the challenge and has received a letter.'
+        User:
+          Message: '&bShow &8: &eYou''ve won the challenge and have received the letter %Letter%.'
     User:
       Added:
-        Message: '&bShow &8: &e%Player% has been added to the game.'
+        Host:
+          Message: '&bShow &8: &e%Player% has been added to the game.'
+        User:
+          Message: '&bShow &8: &eYou''ve been added to %Player%''s game.'
       Removed:
-        Message: '&bShow &8: &e%Player% has been removed from the show.'
+        Host:
+          Message: '&bShow &8: &e%Player% has been removed from the show.'
+        User:
+          Message: '&bShow &8: &eYou''ve been removed from %Player%''s game.'
       Error:
         NotExist:
           Message: '&bShow &8: &e%Player% doesn''t exist.'
         AlreadyInShow:
           Message: '&bShow &8: &e%Player% is already in a game.'
+        NotInShow:
+          Message: '&bShow &8: &e%Player% is not in your game.'
+        SelfInvite:
+          Message: '&bShow &8: &eYou can''t add yourself to the game.'
       

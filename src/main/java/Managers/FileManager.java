@@ -4,12 +4,10 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.io.FileUtils;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -47,7 +45,6 @@ public class FileManager {
      * */
     public void loadFiles() {
     	List<String> files = new ArrayList<String>(Arrays.asList(
-    			"config.yml",
     			"language.yml",
     			"gui.yml"
     			));

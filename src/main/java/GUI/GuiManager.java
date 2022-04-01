@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import org.bukkit.configuration.file.FileConfiguration;
@@ -11,6 +12,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
+import Commands.Show.Host.Show;
+import Commands.Show.Host.ShowRepository;
 import General.GeneralMethods;
 import Main.Main;
 
@@ -59,9 +62,27 @@ public class GuiManager {
 	}
 	
 	
-	public Gui historySelectGui(Player player) {
+	public Gui chooseGui(Player player) {
 		guiConfig = main.getGuiConfig();
-		Gui gui = new Gui(main, player, guiConfig.getInt("Raid.RaidHistory.HistorySelect.Rows"), GeneralMethods.format(guiConfig.getString("Raid.RaidHistory.HistorySelect.GUIName")), null);
+		ShowRepository showRepo = main.getShowRepository();
+		Show show = showRepo.getShowByUser(player.getUniqueId());
+		Gui gui = new Gui(main, player, guiConfig.getInt("GameShow.Choose.ChooseGUI.Rows"), GeneralMethods.format(guiConfig.getString("GameShow.Choose.ChooseGUI.GUIName")), null);
+		
+		String word = show.getWord();
+		
+		int centerWord = word.length()/2;
+		int total = 4-centerWord;
+		
+		Map<String, ItemStack> loadedHeads = main.getFileManager().getLoadedHeads();
+		List<ItemStack> letters = new ArrayList<ItemStack>();
+		
+		String[] charact = show.getGivenLetters().get(player.getUniqueId());
+		for(int i = 0; i < show.getGivenLetters().get(player.getUniqueId()).length; i++) {
+			if(charact[i] == null) letters.add(loadedHeads.get("-"));
+			else letters.add(loadedHeads.get(charact[i].toUpperCase()));
+		}
+		gui.createItemList(total, word.length(), 1, letters, 0);
+		
 		gui.openInventory();
 		
 		return gui;

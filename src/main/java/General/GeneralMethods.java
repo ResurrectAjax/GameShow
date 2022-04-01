@@ -151,6 +151,10 @@ public class GeneralMethods {
  		return GeneralMethods.format(Main.getInstance().getLanguage().getString("Command.Error.BadSyntax.Message"), "%Syntax%", syntax);
  	}
  	
+ 	public static String getReloadMessage() {
+ 		return GeneralMethods.format(Main.getInstance().getLanguage().getString("Command.Reload.Message"));
+ 	}
+ 	
  	/**
  	 * checks if a location is within the bounds of 2 other locations
  	 * @param loc location to check

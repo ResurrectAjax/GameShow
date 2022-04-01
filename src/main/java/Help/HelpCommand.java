@@ -133,6 +133,7 @@ public class HelpCommand extends ParentCommand{
 				
 				String permission = subcommand.getPermissionNode();
 				if(permission != null && !player.hasPermission(permission)) continue;
+				if(subcommand.hasGUI()) continue;
 				
 				commandList.add(message);
 			}

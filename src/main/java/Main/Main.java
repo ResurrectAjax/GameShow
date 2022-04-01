@@ -8,11 +8,13 @@ import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.yaml.snakeyaml.Yaml;
 
-import Commands.Show.ShowRepository;
+import Commands.Show.Host.ShowRepository;
+import GUI.GuiClickEvent;
 import GUI.GuiManager;
 import General.GeneralMethods;
 import Interfaces.ParentCommand;
-import Listeners.JoinListener;
+import Listeners.ChatListener;
+import Listeners.QuitListener;
 import Managers.CommandManager;
 import Managers.FileManager;
 
@@ -27,7 +29,7 @@ public class Main extends JavaPlugin{
 	private CommandManager commandManager;
 	private GuiManager guiManager;
 	private FileManager fileManager;
-	private FileConfiguration config, language, gui;
+	private FileConfiguration language, gui;
 	
 	private ShowRepository showRepo;
 	
@@ -59,7 +61,9 @@ public class Main extends JavaPlugin{
 	 * Load all the classes that implement {@link Listener}
 	 * */
 	private void loadListeners() {
-		getServer().getPluginManager().registerEvents(new JoinListener(this), this);
+		getServer().getPluginManager().registerEvents(new ChatListener(this), this);
+		getServer().getPluginManager().registerEvents(new QuitListener(this), this);
+		getServer().getPluginManager().registerEvents(new GuiClickEvent(this), this);
 	}
 	
 	/**
@@ -139,14 +143,6 @@ public class Main extends JavaPlugin{
 	public FileManager getFileManager() {
 		return fileManager;
 	}
-
-	/**
-	 * Get the config file
-	 * @return {@link FileConfiguration} config
-	 * */
-	public FileConfiguration getConfig() {
-		return config;
-	}
 	
 	/**
 	 * Get the gui file
@@ -177,8 +173,8 @@ public class Main extends JavaPlugin{
 	 * */
 	public void reload() {
         fileManager.loadFiles();
-        config = fileManager.getConfig("config.yml");
         language = fileManager.getConfig("language.yml");
+        gui = fileManager.getConfig("gui.yml");
     }
 
 	/**
@@ -190,7 +186,6 @@ public class Main extends JavaPlugin{
 		//load files
 		fileManager = new FileManager(this);
         fileManager.loadFiles();
-        config = fileManager.getConfig("config.yml");
         language = fileManager.getConfig("language.yml");
         gui = fileManager.getConfig("gui.yml");
         //files
@@ -199,7 +194,7 @@ public class Main extends JavaPlugin{
 		commandManager = new CommandManager(this);
 		guiManager = new GuiManager(this);
 		
-		showRepo = new ShowRepository();
+		showRepo = new ShowRepository(this);
 		//classes
 	}
 }

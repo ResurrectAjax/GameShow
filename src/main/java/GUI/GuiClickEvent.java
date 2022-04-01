@@ -11,8 +11,13 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.ItemStack;
 
+import Commands.Show.Host.Show;
+import Commands.Show.Host.ShowRepository;
+import Commands.Show.User.CloseGui;
+import Commands.Show.User.Guess;
 import General.GeneralMethods;
 import Main.Main;
 
@@ -60,9 +65,10 @@ public class GuiClickEvent implements Listener{
 						runCommandIfExists(player, configSection);	
 						containerID.remove(player.getUniqueId());
 					}	
+					
+					
 				}
 			}
-			
 		}
 	}
 	
@@ -79,5 +85,21 @@ public class GuiClickEvent implements Listener{
 			}
 			player.performCommand(GeneralMethods.format(guiConfig.getString(configSection + ".RunCommand"), player2));
 		}	
+	}
+	
+	@EventHandler
+	public void onInventoryClose(InventoryCloseEvent event) {
+		if(!(event.getPlayer() instanceof Player)) return;
+		if(!(event.getInventory().getHolder() instanceof CustomInventoryHolder)) return;
+		Player player = (Player) event.getPlayer();
+		
+		ShowRepository showRepo = main.getShowRepository();
+		Show show = showRepo.getShowByUser(player.getUniqueId());
+		
+		if(show == null) return;
+		Bukkit.getScheduler().runTaskLater(main, () -> {
+			if(!show.getGuessingUsers().contains(player.getUniqueId())) CloseGui.skipGuess(player);
+			else Guess.guessWord(player);
+		}, 1L);
 	}
 }
