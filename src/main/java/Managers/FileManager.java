@@ -4,14 +4,18 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.io.FileUtils;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.inventory.ItemStack;
 
+import General.HeadUtil;
 import Main.Main;
 
 /**
@@ -23,6 +27,8 @@ public class FileManager {
 
     private final Main main;
     private final Map<String, FileConfiguration> loadedConfigs = new HashMap<String, FileConfiguration>();
+    private final Map<String, ItemStack> loadedHeads = new HashMap<String, ItemStack>();
+    
 
     /**
 	 * Constructor<br>
@@ -32,7 +38,11 @@ public class FileManager {
         this.main = plugin;
     }
     
-    /**
+    public Map<String, ItemStack> getLoadedHeads() {
+		return loadedHeads;
+	}
+
+	/**
      * load the files into the plugin
      * */
     public void loadFiles() {
@@ -45,6 +55,15 @@ public class FileManager {
     	for(String file : files) {
     		createFile(file);
     	}
+    	
+    	createImages();
+    }
+    
+    public void createImages() {
+		for(String key : EncodedHeads.BASE64Heads.keySet()) {
+			ItemStack item = HeadUtil.getItemHeadFromBase64(EncodedHeads.BASE64Heads.get(key));
+			loadedHeads.put(key, item);
+		}
     }
     
     /**
@@ -104,5 +123,4 @@ public class FileManager {
 		}
 	}
     
-   
 }

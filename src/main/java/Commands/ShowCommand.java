@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import Commands.Show.Start;
 import Commands.Show.UserCommand;
 import Interfaces.ParentCommand;
 import Main.Main;
@@ -14,6 +15,7 @@ public class ShowCommand extends ParentCommand{
 	public ShowCommand(Main main) {
 		subcommands = new ArrayList<ParentCommand>(Arrays.asList(
 				new UserCommand(main),
+				new Start(main),
 				new Help.HelpCommand(main)
 				));
 	}
