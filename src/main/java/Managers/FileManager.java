@@ -58,7 +58,7 @@ public class FileManager {
     
     public void createImages() {
 		for(String key : EncodedHeads.BASE64Heads.keySet()) {
-			ItemStack item = HeadUtil.getItemHeadFromBase64(EncodedHeads.BASE64Heads.get(key));
+			ItemStack item = HeadUtil.getSkull(EncodedHeads.BASE64Heads.get(key));
 			loadedHeads.put(key, item);
 		}
     }

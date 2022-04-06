@@ -92,7 +92,7 @@ public class Show {
 	}
 	
 	public boolean start(String word) {
-		if(this.users.size() < 2) return false;
+		if(this.users.size() < 1) return false;
 		setWord(word);
 		return true;
 	}

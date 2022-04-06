@@ -47,6 +47,8 @@ public class ShowRepository {
 		shows.remove(show);
 		
 		FileConfiguration lang = main.getLanguage();
+		
+		if(show.getWord() == null) return;
 		String message = GeneralMethods.format(lang.getString("Command.Show.WonGame.Word.Message"), "%Word%", show.getWord());
 		
 		if(Bukkit.getPlayer(show.getHost()) != null) Bukkit.getPlayer(show.getHost()).sendMessage(message);

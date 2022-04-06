@@ -7,7 +7,8 @@ GameShow:
       Rows: 2
       Items:
         Guess:
-          Material: 'LIME_WOOL'
+          Material: 'WOOL'
+          ID: 5
           ItemSlot: 9
           Name: '&a&lGuess Word'
           RunCommand: 'show guess'
@@ -15,7 +16,8 @@ GameShow:
           - 'Guess the word'
           - 'You only get 1 guess'
         Skip:
-          Material: 'RED_WOOL'
+          Material: 'WOOL'
+          ID: 14
           ItemSlot: 17
           Name: '&c&lSkip'
           RunCommand: 'show closegui'

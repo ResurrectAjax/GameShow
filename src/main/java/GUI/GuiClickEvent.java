@@ -44,7 +44,7 @@ public class GuiClickEvent implements Listener{
 			
 			if(currentItem != null) {
 				
-				if(currentItem.getType().equals(Material.PLAYER_HEAD)) {
+				if(currentItem.getType().equals(Material.SKULL_ITEM)) {
 					if(guiManager.getMHFList().contains(ChatColor.stripColor(currentItem.getItemMeta().getDisplayName()))) {
 						int page = guiManager.getCurrentGui(player.getUniqueId()).getPage(), totalPages = guiManager.getCurrentGui(player.getUniqueId()).getTotalPages()-1;
 						
@@ -56,16 +56,15 @@ public class GuiClickEvent implements Listener{
 				}
 				else {
 					String configSection = "";
-					if(Gui.getGuiItems(Gui.getGuiSection(title)) != null && Gui.getGuiItems(Gui.getGuiSection(title)).contains(currentItem)) {
+					if(Gui.getGuiItems(Gui.getGuiSection(title)) != null && Gui.getGuiItems(Gui.getGuiSection(title)).stream().anyMatch(it -> it.getItemMeta().equals(currentItem.getItemMeta()))) {
 						String itemSection = Gui.getItemInSection(Gui.getGuiSection(title), currentItem.getItemMeta().getDisplayName());
 						configSection = main.getName() +  "." + Gui.getGuiSection(title)[0] + "." + Gui.getGuiSection(title)[1] + ".Items." + itemSection;
 					}
 					
-					if(guiConfig.contains(configSection)) {
+					if(guiConfig.contains(configSection) && configSection != null) {
 						runCommandIfExists(player, configSection);	
 						containerID.remove(player.getUniqueId());
 					}	
-					
 					
 				}
 			}

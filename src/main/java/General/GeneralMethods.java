@@ -21,10 +21,6 @@ import org.bukkit.util.Vector;
 
 import Main.Main;
 import net.md_5.bungee.api.ChatColor;
-import net.md_5.bungee.api.chat.ClickEvent;
-import net.md_5.bungee.api.chat.HoverEvent;
-import net.md_5.bungee.api.chat.TextComponent;
-import net.md_5.bungee.api.chat.hover.content.Text;
 
 /**
  * Class of general methods that can be used everywhere
@@ -32,27 +28,6 @@ import net.md_5.bungee.api.chat.hover.content.Text;
  * @author ResurrectAjax
  * */
 public class GeneralMethods {
-	
-	/**
-	 * turn text into hover text
-	 * @param string base text to put hover text on
-	 * @param hover the hover text
-	 * @param command command that will be activated on click... <i>Nullable</i>
-	 * @param color the color of the base text and hover text
-	 * @return String message
-	 * */
-	public TextComponent createHoverText(String string, String hover, String command, ChatColor color) {
-		TextComponent message = new TextComponent(string);
-		
-		message.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text(color + hover)));
-		message.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, command));
-		
-		message.setBold(true);
-		message.setColor(color);
-		
-		
-		return message;
-	}
 		
 	/**
 	 * check if a string is a valid date
@@ -261,7 +236,7 @@ public class GeneralMethods {
 		ItemStack item = new ItemStack(type, 1);
 		
 		SkullMeta meta = (SkullMeta) item.getItemMeta();
-		meta.setOwningPlayer(Bukkit.getOfflinePlayer(uuid));
+		meta.setOwner(Bukkit.getOfflinePlayer(uuid).getName());
 		
 		meta.setDisplayName(GeneralMethods.format(displayName));
 		
@@ -285,7 +260,7 @@ public class GeneralMethods {
 		ItemStack item = new ItemStack(type, 1);
 		
 		SkullMeta meta = (SkullMeta) item.getItemMeta();
-		meta.setOwningPlayer(Bukkit.getOfflinePlayer(name));
+		meta.setOwner(name);
 		
 		List<String> lore = new ArrayList<String>();
 		switch(name) {

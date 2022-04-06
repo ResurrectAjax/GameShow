@@ -47,7 +47,7 @@ public class TabCompletion implements TabCompleter{
 
 			if(commandManager.getStringList().contains(command.getName().toLowerCase())) {
 				ParentCommand commands = commandManager.getCommandByName(command.getName());
-				if(args.length > 1 && args[0] != null && !args[0].isBlank()) {
+				if(args.length > 1 && args[0] != null) {
 					getCommandArgs(uuid, commands, args[args.length-2], tabCommands);
 				}
 				else {

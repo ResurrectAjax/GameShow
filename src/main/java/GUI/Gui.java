@@ -109,7 +109,8 @@ public class Gui {
 		}
 		
 		for(String key : guiConfig.getConfigurationSection(main.getName() + "." + guiName + ".Items").getKeys(false)) {
-			ItemStack item = new ItemStack(Material.valueOf(guiConfig.getString(main.getName() + "." + guiName + ".Items." + key + ".Material")));
+			int ID = guiConfig.getInt(main.getName() + "." + guiName + ".Items." + key + ".ID");
+			ItemStack item = new ItemStack(Material.valueOf(guiConfig.getString(main.getName() + "." + guiName + ".Items." + key + ".Material")), 1, (byte) ID);
 			List<String> lore = new ArrayList<String>();
 			String name = GeneralMethods.format(guiConfig.getString(main.getName() + "." + guiName + ".Items." + key + ".Name"));
 			ItemMeta meta = item.getItemMeta();
@@ -122,6 +123,7 @@ public class Gui {
 			meta.setDisplayName(GeneralMethods.format(name, replaceStr));
 			
 			meta.setLore(lore);
+			
 			item.setItemMeta(meta);
 			
 			inventory.setItem(slot, item);
